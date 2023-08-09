@@ -17,7 +17,6 @@ namespace MyOrganization
         public Position(string title)
         {
             this.title = title;
-            employee = null;
             directReports = new HashSet<Position>();
         }
 
@@ -34,10 +33,10 @@ namespace MyOrganization
 
         public void SetEmployee(Employee? employee)
         {
-            this.employee = employee;
+            this.employee = employee ?? throw new ArgumentNullException();
         }
 
-        public Employee? GetEmployee()
+        public Employee? GetEmployee(int identifier)
         {
             return employee;
         }
@@ -47,16 +46,28 @@ namespace MyOrganization
             return employee != null;
         }
 
-        public Boolean AddDirectReport(Position position)
+       
+
+        public Boolean AddDirectReport(Position postion)
         {
-            if (position == null)
+            if (postion == null)
                 throw new Exception("position cannot be null");
-            return directReports.Add(position);
+            return directReports.Add(postion);
         }
 
-        public Boolean RemovePosition(Position position)
+        public Position? FindPostionByTitle(Position position)
         {
-            return directReports.Remove(position);
+            if (position.title == title)
+                return this;
+            else
+            {
+                return null;
+            }
+        }
+
+        public Boolean RemoveEmpoyee(Position postion)
+        {
+            return directReports.Remove(postion);
         }
 
         public ImmutableList<Position> GetDirectReports()
@@ -66,7 +77,7 @@ namespace MyOrganization
 
         override public string ToString()
         {
-            return title + (employee != null ? ": " + employee.ToString() : "");
+            return title + ( employee!= null ? ": " + employee.ToString() : "");
         }
     }
 }
